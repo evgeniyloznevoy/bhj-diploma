@@ -47,17 +47,29 @@
    * Отображает список полученных счетов с помощью
    * метода renderItem()
    * */
-  update() {
-      const currentUserJson = User.current();
-      if (currentUserJson != null && currentUserJson != undefined) {
-          let tempObj = JSON.parse(currentUserJson);
-          Account.list(tempObj, function (err, response) {
-              if (response.success) {
-                  App.getWidget("accounts").clear();
-                  App.getWidget("accounts").renderItem(response.data);
-              }
-          });
+
+   update() {
+    const user = User.current();
+    if (!user)
+      return;
+    
+    Account.list(user, (err, response) => {
+      
+      if (err) {
+        alert(JSON.stringify(err));
+        return;
       }
+   
+      if (!response.success) {
+        alert(JSON.stringify(response));
+        return;
+      }  
+      
+      this.clear();
+      for (const item of response.data)
+        this.renderItem(item);
+   
+    });
   }
 
   /**
@@ -123,22 +135,16 @@
    * AccountsWidget.getAccountHTML HTML-код элемента
    * и добавляет его внутрь элемента виджета
    * */
-  renderItem(data) {
-      App.getWidget("accounts").clear();
-      add();
+  renderItem(item) {
+    const container = document.createElement('div');
+    container.innerHTML = this.getAccountHTML(item);
+    
+    const account = container.querySelector('.account');
+    account.querySelector('a').addEventListener('click', e => {
+      e.preventDefault();
+      this.onSelectAccount(account);
+    }); 
 
-      function add() {
-          for (let item of data) {
-              let accPanel = document.getElementsByClassName("accounts-panel").item(0);
-              let el = App.getWidget("accounts").getAccountHTML(item);
-              el.addEventListener("click", function (event) {
-                  event.preventDefault();
-                  App.getWidget("accounts").onSelectAccount(el);
-              });
-              let arr = Array.from(document.getElementsByClassName("accounts-panel").item(0).children);
-              let found = arr.find((item) => item.getAttribute("data-id") === el.getAttribute("data-id"));
-              if (!found)accPanel.appendChild(el);
-          }
-      }
+    this.element.appendChild(account);
   }
 }

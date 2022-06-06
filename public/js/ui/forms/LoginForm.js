@@ -9,16 +9,41 @@
    * устанавливает состояние App.setState( 'user-logged' ) и
    * закрывает окно, в котором находится форма
    * */
-    onSubmit(data) {
-        if (data != null) {
-            User.login(data, function (err, response) {
-                if (response.success === true) {
-                    App.setState('user-logged');
-                    document.getElementById("login-form").reset();
-                    App.getModal("login").close();
-                }
-            });
-            
-        }
-    }
+
+   onSubmit(options) {
+    
+    User.login(options.data, (err, response) => {
+      
+      if (err) {
+        alert(JSON.stringify(err));
+        return;
+      }
+   
+      if (!response.success) {
+        alert(JSON.stringify(response));
+        return;
+      }  
+      
+      for (const input of this.element.querySelectorAll('input'))
+        input.value = '';
+      
+      App.setState('user-logged');  
+      App.getModal(this.element.closest('.modal').dataset.modalId).close();
+    });
+    
+  }
 }
+
+//     onSubmit(data) {
+//         if (data != null) {
+//             User.login(data, function (err, response) {
+//                 if (response.success === true) {
+//                     App.setState('user-logged');
+//                     document.getElementById("login-form").reset();
+//                     App.getModal("login").close();
+//                 }
+//             });
+            
+//         }
+//     }
+// }

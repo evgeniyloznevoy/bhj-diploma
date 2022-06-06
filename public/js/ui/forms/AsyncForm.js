@@ -25,18 +25,26 @@
    * Необходимо запретить отправку формы и в момент отправки
    * вызывает метод submit()
    * */
-  registerEvents() {
-      const submitBtn = this.element.closest(".modal-content").getElementsByClassName("btn-primary").item(0);
-      submitBtn.addEventListener("click", function (event) {
-          event.preventDefault();
-          let formName = submitBtn.closest(".modal").getAttribute("data-modal-id");
-          if (formName === "newAccount") formName = "createAccount";
-          if (formName === "newIncome") formName = "createIncome";
-          if (formName === "newExpense") formName = "createExpense";
-          const form = App.getForm(formName);
-          form.submit();
-      });
+
+   registerEvents() {
+    this.element.addEventListener('submit', e => {
+      e.preventDefault();
+      this.submit();
+    });
   }
+
+//   registerEvents() {
+//       const submitBtn = this.element.closest(".modal-content").getElementsByClassName("btn-primary").item(0);
+//       submitBtn.addEventListener("click", function (event) {
+//           event.preventDefault();
+//           let formName = submitBtn.closest(".modal").getAttribute("data-modal-id");
+//           if (formName === "newAccount") formName = "createAccount";
+//           if (formName === "newIncome") formName = "createIncome";
+//           if (formName === "newExpense") formName = "createExpense";
+//           const form = App.getForm(formName);
+//           form.submit();
+//       });
+//   }
 
   /**
    * Преобразует данные формы в объект вида
@@ -63,13 +71,20 @@
    * Вызывает метод onSubmit и передаёт туда
    * данные, полученные из метода getData()
    * */
-  submit() {
-      let formName = this.element.closest(".modal").getAttribute("data-modal-id");
-      if (formName === "newAccount") formName = "createAccount";
-      if (formName === "newIncome") formName = "createIncome";
-      if (formName === "newExpense") formName = "createExpense";
-      const form = App.getForm(formName);
-      const data = form.getData();
-      form.onSubmit(data);
+
+   submit() {
+    console.log(this.getData());
+    this.onSubmit({data: this.getData()});
   }
 }
+
+//   submit() {
+//       let formName = this.element.closest(".modal").getAttribute("data-modal-id");
+//       if (formName === "newAccount") formName = "createAccount";
+//       if (formName === "newIncome") formName = "createIncome";
+//       if (formName === "newExpense") formName = "createExpense";
+//       const form = App.getForm(formName);
+//       const data = form.getData();
+//       form.onSubmit(data);
+//   }
+// }
