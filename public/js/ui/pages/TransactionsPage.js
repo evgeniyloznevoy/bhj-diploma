@@ -30,20 +30,19 @@
      * методами TransactionsPage.removeTransaction и
      * TransactionsPage.removeAccount соответственно
      * */
-    registerEvents() {
-      
-      this.element.querySelector('.remove-account').addEventListener('click', e => {
-        e.preventDefault();
-        this.removeAccount();
+     registerEvents() {
+      this.element.addEventListener('click', (e) => {
+        const accountButton = e.target.closest('.remove-account');
+        if (accountButton) this.removeAccount();
+        
+        const transactionButton = e.target.closest('.transaction__remove');
+        if (transactionButton) {
+          const transactionId = transactionButton.dataset.id;
+          this.removeTransaction(transactionId);
+        };
       });
-  
-      for (const button of this.element.querySelectorAll('.transaction__remove'))
-        button.addEventListener('click', e => {
-          e.preventDefault();
-          this.removeTransaction(button.dataset.id);
-        });
-      
     }
+  
   
     /**
      * Удаляет счёт. Необходимо показать диаголовое окно (с помощью confirm())
@@ -108,37 +107,21 @@
      * Получает список Transaction.list и полученные данные передаёт
      * в TransactionsPage.renderTransactions()
      * */
-    render(options) {
-      if (!options)
-        return;
+     render( options ) {
+    
       this.lastOptions = options;
-      
-      Account.get(options.account_id, User.current(), (err, response) => {
-        if (err) {
-          alert(JSON.stringify(err));
-          return;
-        }   
-        if (!response.success) {
-          alert(JSON.stringify(response));
-          return;
-        }  
-        
-        this.renderTitle(response.data.name);  
-        
-        Transaction.list({ account_id: response.data.id }, (err, response) => {     
-          if (err) {
-            alert(JSON.stringify(err));
-            return;
-          }  
-          if (!response.success) {
-            alert(JSON.stringify(response));
-            return;
-          }  
-        
-          this.renderTransactions(response.data);      
-        });
-       
+      if (!options) return;
+  
+      Account.get(options.account_id, {}, (err, response) => {
+        if (err || !response) return;
+        this.renderTitle(response.data.name)
+      })
+  
+      Transaction.list(options, (err, response) => {
+        if (err) return;
+        this.renderTransactions(response.data);
       });
+  
     }
   
     /**

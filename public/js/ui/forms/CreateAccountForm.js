@@ -1,46 +1,24 @@
 /**
  * Класс CreateAccountForm управляет формой
  * создания нового счёта
+ * Наследуется от AsyncForm
  * */
- class CreateAccountForm extends AsyncForm {
+ class CreateAccountForm extends AsyncForm{
   /**
    * Создаёт счёт с помощью Account.create и закрывает
-   * окно в случае успеха, а также вызывает App.update()
+   * окно (в котором находится форма) в случае успеха,
+   * а также вызывает App.update()
    * и сбрасывает форму
    * */
-
-   onSubmit(options) {
-    
-    Account.create(options.data, (err, response) => {
-      
-      if (err) {
-        alert(JSON.stringify(err));
-        return;
+  onSubmit( options ) {
+    Account.create(options.data, ( err, response ) => {
+      if (err) return console.log('Ошибка: ', err);
+      else {
+        this.element.reset();
+        App.update();
+        const modal = new Modal(this.element.closest('.modal'));
+        modal.close();
       }
-   
-      if (!response.success) {
-        alert(JSON.stringify(response));
-        return;
-      } 
-      
-      App.getModal(this.element.closest('.modal').dataset.modalId).close(); 
-      App.update(); 
-      
-      for (const input of this.element.querySelectorAll('input'))
-        input.value = '';
-      
     });
-    
   }
 }
-
-//   onSubmit(data) {
-//       Account.create(data, function (err, response) {
-//           if (response.success === true) {
-//               App.getModal("createAccount").close();
-//               document.getElementById("new-account-form").reset();
-//               App.update();
-//           }
-//       })
-//   }
-// }

@@ -17,8 +17,12 @@
 * Возвращает текущего авторизованного пользователя
 * из локального хранилища
 * */
-  static current() {
-      return localStorage.getItem("user");
+static current() {
+    if (JSON.parse(localStorage.getItem("user"))) {
+      return JSON.parse(localStorage.getItem("user"))
+    } else {
+      return null
+    };
   }
 
   /**

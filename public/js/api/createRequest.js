@@ -4,7 +4,7 @@
  * */
  const createRequest = (options = {}) => {
     const {url, headers, data, responseType, method, callback} = options;  
-    const requestUrl = new URL('http:/localhost:8000' + url);
+    const requestUrl = new URL(url);
     
     if (method === 'GET')
       for (const key in data) {

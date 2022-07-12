@@ -12,39 +12,24 @@
    * Сохраняет переданный элемент и регистрирует события
    * через registerEvents()
    * */
-  constructor(element) {
-      if (element != null) {
-          this.element = element;
-          this.registerEvents();
-      } else {
-          throw new Error("cant create obj of AsyncForm.class because null-element has appeared in constructor");
-      }
+  constructor( element ) {
+    if (!element) throw new Error('Элемента не существует!!');
+    this.element = element;
+    this.registerEvents();
   }
 
   /**
-   * Необходимо запретить отправку формы и в момент отправки
+   * Необходимо запретить отправку форму и в момент отправки
    * вызывает метод submit()
    * */
-
-   registerEvents() {
-    this.element.addEventListener('submit', e => {
-      e.preventDefault();
-      this.submit();
-    });
+  registerEvents() {
+      this.element.addEventListener('submit', (e) => {
+        if(this.element.checkValidity()) {
+          e.preventDefault();
+          this.submit();
+        }
+      })
   }
-
-//   registerEvents() {
-//       const submitBtn = this.element.closest(".modal-content").getElementsByClassName("btn-primary").item(0);
-//       submitBtn.addEventListener("click", function (event) {
-//           event.preventDefault();
-//           let formName = submitBtn.closest(".modal").getAttribute("data-modal-id");
-//           if (formName === "newAccount") formName = "createAccount";
-//           if (formName === "newIncome") formName = "createIncome";
-//           if (formName === "newExpense") formName = "createExpense";
-//           const form = App.getForm(formName);
-//           form.submit();
-//       });
-//   }
 
   /**
    * Преобразует данные формы в объект вида
@@ -54,16 +39,20 @@
    * }
    * */
   getData() {
-      const formData = new FormData(this.element);
+    const formData = new FormData(this.element);
+    const entries = formData.entries();
 
-      let object = {};
-      formData.forEach(function (value, key) {
-          object[key] = value;
-      });
-      return object;
+    const data = {}
+    for (let item of entries) {
+      const key = item[ 0 ],
+      value = item[ 1 ];
+      data[key] = value;
+    }
+
+    return data;
   }
 
-  onSubmit(options) {
+  onSubmit( options ) {
 
   }
 
@@ -71,20 +60,13 @@
    * Вызывает метод onSubmit и передаёт туда
    * данные, полученные из метода getData()
    * */
+  submit() {
+    const data = {
+      url: this.element.action,
+      method: this.element.method,
+      data: this.getData()
+    }
 
-   submit() {
-    console.log(this.getData());
-    this.onSubmit({data: this.getData()});
+    this.onSubmit(data);
   }
 }
-
-//   submit() {
-//       let formName = this.element.closest(".modal").getAttribute("data-modal-id");
-//       if (formName === "newAccount") formName = "createAccount";
-//       if (formName === "newIncome") formName = "createIncome";
-//       if (formName === "newExpense") formName = "createExpense";
-//       const form = App.getForm(formName);
-//       const data = form.getData();
-//       form.onSubmit(data);
-//   }
-// }

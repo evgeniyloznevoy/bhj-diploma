@@ -31,14 +31,14 @@
           event.preventDefault();
           let name = event.target.closest(".modal").getAttribute("data-modal-id");
           if (name == "newAccount") name = "createAccount";
-          App.getModal(name).onClose(event.target.closest(".modal"));
+          This(name).onClose(event.target.closest(".modal"));
       })
 
       const closeBtn = this.element.getElementsByClassName("btn-default").item(0);
       closeBtn.addEventListener("click", function (event) {
           event.preventDefault();
           let name = event.target.closest(".modal").getAttribute("data-modal-id");
-          App.getModal(name).onClose(event.target.closest(".modal"));
+          This(name).onClose(event.target.closest(".modal"));
       })
   }
 
@@ -49,7 +49,7 @@
   onClose(e) {
       let name = e.getAttribute("data-modal-id");
       if (name == "newAccount") name = "createAccount";
-      App.getModal(name).close();
+      This(name).close();
   }
   /**
    * Открывает окно: устанавливает CSS-свойство display
