@@ -60,13 +60,8 @@
    * Вызывает метод onSubmit и передаёт туда
    * данные, полученные из метода getData()
    * */
-  submit() {
-    const data = {
-      url: this.element.action,
-      method: this.element.method,
-      data: this.getData()
-    }
-
-    this.onSubmit(data);
+   submit() {
+    let result = this.getData();
+    this.onSubmit(result);
   }
 }

@@ -18,12 +18,9 @@
 * из локального хранилища
 * */
 static current() {
-    if (JSON.parse(localStorage.getItem("user"))) {
-      return JSON.parse(localStorage.getItem("user"))
-    } else {
-      return null
-    };
+        return JSON.parse(localStorage.getItem("user"))
   }
+
 
   /**
    * Удаляет информацию об авторизованном
@@ -93,7 +90,7 @@ static current() {
           responseType: 'json',
           data,
           callback: (err, response) => {
-              if (response && response.user) this.setCurrent(response.user);
+              if (response && response.user) User.setCurrent(response.user);
               callback(err, response);
           }
       });

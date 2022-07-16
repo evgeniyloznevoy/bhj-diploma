@@ -3,47 +3,38 @@
  * на сервер.
  * */
  const createRequest = (options = {}) => {
-    const {url, headers, data, responseType, method, callback} = options;  
-    const requestUrl = new URL(url);
-    
-    if (method === 'GET')
-      for (const key in data) {
-        requestUrl.searchParams.set(key, data[key]);
+  let formData = new FormData();
+  if (options.method.toUpperCase() != 'GET') {
+      for (let field in options.data) {
+          formData.append(field, options.data[field]);
       }
-    
-    const request = new XMLHttpRequest;
-    request.withCredentials = true; 
-    
-    try {
-      request.open(method, requestUrl);
-      for (const header in headers)
-        request.setRequestHeader(header, headers[header]);
-      request.responseType = responseType;
-  
-      if (method === 'GET') {
-        request.send();
+  } else {
+      let param = '';
+      let arr = [];
+      for (let field in options.data) {
+        arr.push(field + '=' + options.data[field]);
+      }
+      param = arr.join('&');
+      options.url = options.url + '?' + param;
+  }    
+  let xhr = new XMLHttpRequest();
+  xhr.responseType = 'json';
+  try {
+      xhr.open(options.method, options.url);
+      xhr.send(formData);
+  }
+  catch (e) {
+  options.callback(e);
+}
+
+  xhr.onload = function() {
+      let response = null;
+      let error = null;
+      if (xhr.status != 200) {
+          error = xhr.statusText;
       } else {
-        const formData = new FormData;
-        for (const key in data)
-          formData.append(key, data[key]);
-        request.send(formData);
+          response = xhr.response;
       }
-    } catch(e) {
-      callback(e);
-    }
-    
-    request.addEventListener('readystatechange', function() {
-      if (this.readyState !== this.DONE)  
-        return;
-            
-      if (this.status === 200) { 
-        callback(null, this.response);
-      } else if (this.status) {
-        callback({ status: this.status, statusText: this.statusText });
-      } else {
-        callback({ status: 0, statusText: 'Нет связи с сервером' });      
-      }
-    });
-   
-    return request;
-  };
+      options.callback(error, response);
+  }
+};
