@@ -10,19 +10,13 @@
    * устанавливает состояние App.setState( 'user-logged' ) и
    * закрывает окно, в котором находится форма
    * */
-  onSubmit( options ) {
-
-    User.login( options.data, ( err, response ) => {
-      if (err) return console.log( 'Ошибка:', err );
-      else if (!response.user) alert('Неправильный логин или пароль');
-      else {
-        this.element.reset();
-        User.setCurrent(response.user);
+   onSubmit(data) {
+    User.login(data, ((err, response) => {
+      if (response.success) {
+        this.element.reset()
         App.setState('user-logged')
-        const modal = new Modal(this.element.closest('.modal'))
-        modal.close();
+        App.getModal('login').close()
       }
-    });
-
+    }))
   }
 }

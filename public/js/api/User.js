@@ -34,28 +34,20 @@ static current() {
    * Получает информацию о текущем
    * авторизованном пользователе.
    * */
-  static fetch(callback) {
-      let currentUser = User.current();
-      if (currentUser != null && currentUser != undefined) {
-          let obj = {
-              "success": true,
-              "user": {
-                  "id": currentUser.id,
-                  "name": currentUser.name,
-                  "email": currentUser.email,
-                  //"created_at": "2019-03-06 18:46:41",
-                  //"updated_at": "2019-03-06 18:46:41"
-              }
-          }
-          callback(null, obj);
-      } else {
-          let err = new Error("such user is not authorized");
-          let obj = {
-              "success": false,
-              "error": "authorization required"
-          }
-          callback(err, obj);
+   static fetch(callback) {
+    createRequest({
+      url: this.URL + '/current',
+      method: 'GET',
+      responseType: 'json',
+      callback: (err, response) => {
+        if (response.success) {
+          this.setCurrent(response.user);
+        } else {
+        this.unsetCurrent();
+        }
+        callback(err, response);
       }
+    })
   }
 
   /**

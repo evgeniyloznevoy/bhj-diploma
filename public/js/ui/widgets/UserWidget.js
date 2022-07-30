@@ -13,7 +13,7 @@
    * */
     constructor(element) {
         if (element == null) {
-            throw new Errow("cant create obj of UserWidget.class because null-element has appeared in constructor");
+            throw new Error("cant create obj of UserWidget.class because null-element has appeared in constructor");
         } else {
             this.element = element;
         }

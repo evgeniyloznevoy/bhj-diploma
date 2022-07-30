@@ -46,17 +46,15 @@
    * вызывает App.update(), сбрасывает форму и закрывает окно,
    * в котором находится форма
    * */
-  onSubmit( options ) {
-    Transaction.create(options.data, (err, response) => {
-      if ((err) || (!response.success)) {return;}
-
-      const modal = new Modal(this.element.closest('.modal'));
-      modal.close();
-      this.element.reset();
-      App.update();
-
-    })
-    Transaction.create(options);
+   onSubmit(data) {
+    let callback = (error, response) => {
+      if (response.success) {
+        this.element.reset();
+        App.getModal('newIncome').close();
+        App.getModal('newExpense').close();
+        App.update();
+      }
+    }
+    Transaction.create(data, callback);
   }
 }
-
