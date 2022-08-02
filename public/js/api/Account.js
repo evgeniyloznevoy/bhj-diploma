@@ -4,11 +4,11 @@
  * Имеет свойство URL со значением '/account'
  * */
  class Account extends Entity {
-    static URL = "/account";
+    static url = "/account";
 
   static get(id = '', callback) {
     createRequest({
-      url: this.URL + '/' + id,
+      url: this.url + '/' + id,
       // data,
       method: 'GET',
       callback

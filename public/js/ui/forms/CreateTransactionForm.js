@@ -25,22 +25,20 @@
    * Обновляет в форме всплывающего окна выпадающий список
    * */
   renderAccountsList() {
-    
     const accountsSelectList = this.element.querySelector('.accounts-select');
-
     Account.list(User.current(), (err, response) => {
-      if ((err) || (!response.data)) return;
-      accountsSelectList.innerHTML = '';
-      const accounts = response.data;
-      accounts.forEach(element => {
-        const newOption = `<option value="${element.id}">${element.name}</option>`
-        accountsSelectList.insertAdjacentHTML('beforeend', newOption);
-      });
+      if (response && response.data) {
+        accountsSelectList.innerHTML = '';
+        const accounts = response.data;
+        accounts.forEach(element => {
+          const newOption = `<option value="${element.id}">${element.name}</option>`
+          accountsSelectList.insertAdjacentHTML('beforeend', newOption);
+        });
+      }
     });
-
   }
 
-  /** 
+    /** 
    * Создаёт новую транзакцию (доход или расход)
    * с помощью Transaction.create. По успешному результату
    * вызывает App.update(), сбрасывает форму и закрывает окно,

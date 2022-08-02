@@ -52,7 +52,9 @@
       exitBtn.addEventListener("click", function (event) {
           event.preventDefault();
           User.logout(function (err, response) {
-              if (response.success) App.setState('init');
+              if (response.success) {
+                App.setState('init');
+              };
           })
       })
   }

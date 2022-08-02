@@ -33,8 +33,9 @@
      registerEvents() {
       this.element.addEventListener('click', (e) => {
         const accountButton = e.target.closest('.remove-account');
-        if (accountButton) this.removeAccount();
-        
+        if (accountButton) {
+          this.removeAccount();
+        };
         const transactionButton = e.target.closest('.transaction__remove');
         if (transactionButton) {
           const transactionId = transactionButton.dataset.id;
@@ -53,11 +54,13 @@
      * для обновления приложения
      * */
     removeAccount() {
-      if(!this.lastOptions)
+      if(!this.lastOptions) {
         return;
-      if(!confirm('Вы действительно хотите удалить этот счёт?'))
+      };
+      if(!confirm('Вы действительно хотите удалить этот счёт?')) {
         return;
-      Account.remove(this.lastOptions.account_id, {}, (err, response) => {
+      };
+      Account.remove({id: id}, (err, response) => {
         
         if (err) {
           alert(JSON.stringify(err));
@@ -81,10 +84,11 @@
      * По удалению транзакции вызовите метод App.update()
      * */
     removeTransaction(id) {
-      if(!confirm('Вы действительно хотите удалить эту транзакцию?'))
+      if(!confirm('Вы действительно хотите удалить эту транзакцию?')) {
         return;
+      };
       
-      Transaction.remove(id, {}, (err, response) => {
+      Transaction.remove({id: id}, (err, response) => {
         
         if (err) {
           alert(JSON.stringify(err));
@@ -110,15 +114,20 @@
      render( options ) {
     
       this.lastOptions = options;
-      if (!options) return;
-  
-      Account.get(options.account_id, {}, (err, response) => {
-        if (err || !response) return;
+      if (!options) {
+        return;
+      };
+      Account.get(options.account_id, (err, response) => {
+        if (err || !response) {
+          return;
+        };
         this.renderTitle(response.data.name)
       })
   
       Transaction.list(options, (err, response) => {
-        if (err) return;
+        if (err) {
+          return;
+        };
         this.renderTransactions(response.data);
       });
   
@@ -164,9 +173,9 @@
       
       let month;
       month = monthNames[date.slice(5,7) - 1];
-      if (!month)
+      if (!month) {
         month = '*****';
-      
+      };
       return(`${date.slice(8,10)} ${month} ${date.slice(0,4)} г. в ${date.slice(11,16)}`);
     }
   

@@ -13,7 +13,9 @@
    * через registerEvents()
    * */
   constructor( element ) {
-    if (!element) throw new Error('Элемента не существует!!');
+    if (!element) {
+      throw new Error('Элемента не существует!!');
+    };
     this.element = element;
     this.registerEvents();
   }

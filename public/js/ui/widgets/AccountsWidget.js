@@ -13,7 +13,9 @@
    * необходимо выкинуть ошибку.
    * */
   constructor( element ) {
-    if (!element) throw new Error('Элемента не существует!!');      
+    if (!element) {
+      throw new Error('Элемента не существует!!');
+    };      
     this.element = element;
     this.registerEvents();
     this.update();
@@ -53,10 +55,14 @@
    * метода render()
    * */
   update() {
-    if (!User.current()) return;
+    if (!User.current()) {
+      return;
+    };
 
     Account.list(User.current(), (err, response) => {
-      if ((err) || (!response.data)) return;
+      if ((err) || (!response.data)) {
+        return;
+      };
       this.clear();
       this.render(response.data);
     });

@@ -4,7 +4,7 @@
  * Имеет свойство URL, равное '/user'.
  * */
  class User {
-  static URL = "/user";
+  static url = "/user";
   /**
    * Устанавливает текущего пользователя в
    * локальном хранилище.
@@ -36,7 +36,7 @@ static current() {
    * */
    static fetch(callback) {
     createRequest({
-      url: this.URL + '/current',
+      url: this.url + '/current',
       method: 'GET',
       responseType: 'json',
       callback: (err, response) => {
@@ -58,12 +58,14 @@ static current() {
    * */
   static login(data, callback) {
       createRequest({
-          url: this.URL + '/login',
+          url: this.url + '/login',
           method: 'POST',
           responseType: 'json',
           data: data,
           callback: (err, response) => {
-              if (response && response.user) User.setCurrent(response.user);
+              if (response && response.user) {
+                User.setCurrent(response.user);
+              };
               callback(err, response);
           }
       });
@@ -77,12 +79,14 @@ static current() {
    * */
   static register(data, callback) {
       createRequest({
-          url: this.URL + '/register',
+          url: this.url + '/register',
           method: 'POST',
           responseType: 'json',
           data,
           callback: (err, response) => {
-              if (response && response.user) User.setCurrent(response.user);
+              if (response && response.user) {
+                User.setCurrent(response.user);
+              };
               callback(err, response);
           }
       });
@@ -94,11 +98,13 @@ static current() {
    * */
   static logout(callback) {
       createRequest({
-          url: this.URL + "/logout",
+          url: this.url + "/logout",
           method: "POST",
           data: {},
           callback: (err, response) => {
-              if (response.success) this.unsetCurrent();
+              if (response.success) {
+                this.unsetCurrent();
+              };
               callback(err, response);
           }
       });
