@@ -60,7 +60,7 @@
       if(!confirm('Вы действительно хотите удалить этот счёт?')) {
         return;
       };
-      Account.remove({id: id}, (err, response) => {
+      Account.remove({id: account_id}, (err, response) => {
         
         if (err) {
           alert(JSON.stringify(err));
@@ -213,17 +213,14 @@
      * Отрисовывает список транзакций на странице
      * используя getTransactionHTML
      * */
-    renderTransactions(data) {
-      let transactions = '';
-      for (const item of data)
-        transactions += this.getTransactionHTML(item);
-      this.element.querySelector('.content').innerHTML = transactions;
-  
-      for (const button of this.element.querySelectorAll('.transaction__remove'))
-        button.addEventListener('click', e => {
-          e.preventDefault();
-          this.removeTransaction(button.dataset.id);
-        });
-        
+     renderTransactions(data) {
+      let object = document.querySelector('.content');
+      object.innerHTML = '';
+      for (let item of data) {
+        let transactions = this.getTransactionHTML(item);
+        let div = document.createElement('div');
+        div.innerHTML = transactions;
+        object.appendChild(div.firstChild);
+      }
     }
   }
