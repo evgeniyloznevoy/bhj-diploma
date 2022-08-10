@@ -60,7 +60,7 @@
       if(!confirm('Вы действительно хотите удалить этот счёт?')) {
         return;
       };
-      Account.remove({id: account_id}, (err, response) => {
+      Account.remove({id: this.lastOptions.account_id}, (err, response) => {
         
         if (err) {
           alert(JSON.stringify(err));
